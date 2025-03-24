@@ -73,7 +73,7 @@ void CServerDisplayer::SetWindowName()
 {
 	char buff[256];
 
-	
+	wsprintf(buff, "[%s] MuEmu GameServer Ex097 (PlayerCount : %d/%d) (MonsterCount : %d/%d)", gServerInfo.m_WindowName, gObjTotalUser, gServerInfo.m_ServerMaxUserNumber, gObjTotalMonster, MAX_OBJECT_MONSTER);
 
 	SetWindowText(this->m_hwnd, buff);
 }
