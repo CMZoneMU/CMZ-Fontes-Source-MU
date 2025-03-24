@@ -1,13 +1,3 @@
-#include "stdafx.h"
-#include "ServerDisplayer.h"
-#include "GameMain.h"
-#include "Log.h"
-#include "ServerInfo.h"
-#include "SocketManager.h"
-#include "User.h"
-#include "resource.h"
-
-
 CServerDisplayer gServerDisplayer;
 
 // ============================================================================================================================
@@ -73,6 +63,10 @@ void CServerDisplayer::Run()
 	}
 
 	this->ImgTop();
+
+	this->PaintEventTime();
+
+	this->PaintInvasionTime();
 }
 
 void CServerDisplayer::SetWindowName()
@@ -174,7 +168,7 @@ void CServerDisplayer::DrawLogs(HDC hdcMem, RECT rect)
 {
 	const int logStartX = 10;
 
-	const int logStartY = rect.bottom - 555;
+	const int logStartY = rect.bottom - 485;
 
 	const int logLineSpacing = 15;
 
