@@ -1,0 +1,17 @@
+.cpp
+float getX(float x) {
+	return x / g_fScreenRate_x;
+}
+
+float getY(float y) {
+	return y / g_fScreenRate_x;
+}
+
+bool IsCursorInZone(short x, short y, short x2, short y2) {
+	return pCursorX >= x && pCursorX <= x + x2 && pCursorY >= y && pCursorY <= y + y2;
+}
+
+.h
+float getX(float x);
+float getY(float y);
+bool IsCursorInZone(short x, short y, short x2, short y2);
