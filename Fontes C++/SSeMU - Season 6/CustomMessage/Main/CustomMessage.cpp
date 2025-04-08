@@ -1,6 +1,14 @@
+// CustomJewel.cpp: implementation of the CCustomJewel class.
+//
+//////////////////////////////////////////////////////////////////////
+
 #include "stdafx.h"
 
+
 CCustomMessage gCustomMessage;
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
 
 CCustomMessage::CCustomMessage() // OK
 {
@@ -14,8 +22,6 @@ CCustomMessage::~CCustomMessage() // OK
 
 void CCustomMessage::Init() // OK
 {
-	this->m_LangSelected = 0;
-
 	memset(this->m_DefaultMessage, 0, sizeof(this->m_DefaultMessage));
 
 	for (int n = 0;n < MAX_CUSTOM_MESSAGE;n++)
@@ -80,7 +86,7 @@ void CCustomMessage::SetInfoSpn(CUSTOM_MESSAGE_INFO info) // OK
 	this->m_SpnCustomMessageInfo[info.Index] = info;
 }
 
-CUSTOM_MESSAGE_INFO* CCustomMessage::GetInfo(int index) // OK
+CUSTOM_MESSAGE_INFO* CCustomMessage::GetInfoEng(int index) // OK
 {
 	if (index < 0 || index >= MAX_CUSTOM_MESSAGE)
 	{
@@ -88,41 +94,78 @@ CUSTOM_MESSAGE_INFO* CCustomMessage::GetInfo(int index) // OK
 		return 0;
 	}
 
-	if (this->m_LangSelected == 1)
+	if (this->m_EngCustomMessageInfo[index].Index != index)
 	{
-		if (this->m_PorCustomMessageInfo[index].Index != index)
-		{
-			wsprintf(this->m_DefaultMessage, "Could not find message %d!", index);
-			return 0;
-		}
-
-		return &this->m_PorCustomMessageInfo[index];
+		wsprintf(this->m_DefaultMessage, "Could not find message %d!", index);
+		return 0;
 	}
-	else if (this->m_LangSelected == 2)
+
+	return &this->m_EngCustomMessageInfo[index];
+}
+
+CUSTOM_MESSAGE_INFO* CCustomMessage::GetInfoPor(int index) // OK
+{
+	if (index < 0 || index >= MAX_CUSTOM_MESSAGE)
 	{
-		if (this->m_SpnCustomMessageInfo[index].Index != index)
-		{
-			wsprintf(this->m_DefaultMessage, "Could not find message %d!", index);
-			return 0;
-		}
-
-		return &this->m_SpnCustomMessageInfo[index];
+		wsprintf(this->m_DefaultMessage, "Message %d out of bound!", index);
+		return 0;
 	}
-	else
+
+	if (this->m_PorCustomMessageInfo[index].Index != index)
 	{
-		if (this->m_EngCustomMessageInfo[index].Index != index)
-		{
-			wsprintf(this->m_DefaultMessage, "Could not find message %d!", index);
-			return 0;
-		}
-
-		return &this->m_EngCustomMessageInfo[index];
+		wsprintf(this->m_DefaultMessage, "Could not find message %d!", index);
+		return 0;
 	}
+
+	return &this->m_PorCustomMessageInfo[index];
+}
+
+CUSTOM_MESSAGE_INFO* CCustomMessage::GetInfoSpn(int index) // OK
+{
+	if (index < 0 || index >= MAX_CUSTOM_MESSAGE)
+	{
+		wsprintf(this->m_DefaultMessage, "Message %d out of bound!", index);
+		return 0;
+	}
+
+	if (this->m_SpnCustomMessageInfo[index].Index != index)
+	{
+		wsprintf(this->m_DefaultMessage, "Could not find message %d!", index);
+		return 0;
+	}
+
+	return &this->m_SpnCustomMessageInfo[index];
 }
 
 char* CCustomMessage::GetMessage(int index) // OK
 {
-	CUSTOM_MESSAGE_INFO* lpInfo = this->GetInfo(index);
+	if (strcmp((char*)CMAIN_LANGUAGE, "Eng") == 0)
+	{
+		CUSTOM_MESSAGE_INFO* lpInfo = this->GetInfoEng(index);
+		if (lpInfo == 0) { return this->m_DefaultMessage; }
+		return lpInfo->Message;
+	}
+
+	if (strcmp((char*)CMAIN_LANGUAGE, "Por") == 0)
+	{
+		CUSTOM_MESSAGE_INFO* lpInfo = this->GetInfoPor(index);
+		if (lpInfo == 0) { return this->m_DefaultMessage; }
+		return lpInfo->Message;
+	}
+
+	if (strcmp((char*)CMAIN_LANGUAGE, "Spn") == 0)
+	{
+		CUSTOM_MESSAGE_INFO* lpInfo = this->GetInfoSpn(index);
+		if (lpInfo == 0) { return this->m_DefaultMessage; }
+		return lpInfo->Message;
+	}
+
+	CUSTOM_MESSAGE_INFO* lpInfo = this->GetInfoEng(index);
 	if (lpInfo == 0) { return this->m_DefaultMessage; }
 	return lpInfo->Message;
+}
+
+char* CCustomMessage::GetMessageB(int index) // Text.bmd
+{
+	return CGetTextLine((void*)CTextLineThis, index);
 }

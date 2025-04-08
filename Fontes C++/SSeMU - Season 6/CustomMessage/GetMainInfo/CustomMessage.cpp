@@ -3,7 +3,6 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "CustomMessage.h"
 #include "MemScript.h"
 
 CCustomMessage gCustomMessage;
@@ -23,6 +22,8 @@ CCustomMessage::~CCustomMessage() // OK
 
 void CCustomMessage::Init() // OK
 {
+	memset(this->m_DefaultMessage,0,sizeof(this->m_DefaultMessage));
+
 	for(int n=0;n < MAX_CUSTOM_MESSAGE;n++)
 	{
 		this->m_EngCustomMessageInfo[n].Index = -1;
@@ -128,7 +129,6 @@ bool CCustomMessage::Load(char* path) // OK
 	}
 
 	delete lpMemScript;
-
 	return 1;
 }
 
@@ -160,4 +160,55 @@ void CCustomMessage::SetInfoSpn(CUSTOM_MESSAGE_INFO info) // OK
 	}
 
 	this->m_SpnCustomMessageInfo[info.Index] = info;
+}
+
+CUSTOM_MESSAGE_INFO* CCustomMessage::GetInfoEng(int index) // OK
+{
+	if(index < 0 || index >= MAX_CUSTOM_MESSAGE)
+	{
+		wsprintf(this->m_DefaultMessage,"Message %d out of bound!",index);
+		return 0;
+	}
+
+	if(this->m_EngCustomMessageInfo[index].Index != index)
+	{
+		wsprintf(this->m_DefaultMessage,"Could not find message %d!",index);
+		return 0;
+	}
+
+	return &this->m_EngCustomMessageInfo[index];
+}
+
+CUSTOM_MESSAGE_INFO* CCustomMessage::GetInfoPor(int index) // OK
+{
+	if(index < 0 || index >= MAX_CUSTOM_MESSAGE)
+	{
+		wsprintf(this->m_DefaultMessage,"Message %d out of bound!",index);
+		return 0;
+	}
+
+	if(this->m_PorCustomMessageInfo[index].Index != index)
+	{
+		wsprintf(this->m_DefaultMessage,"Could not find message %d!",index);
+		return 0;
+	}
+
+	return &this->m_PorCustomMessageInfo[index];
+}
+
+CUSTOM_MESSAGE_INFO* CCustomMessage::GetInfoSpn(int index) // OK
+{
+	if(index < 0 || index >= MAX_CUSTOM_MESSAGE)
+	{
+		wsprintf(this->m_DefaultMessage,"Message %d out of bound!",index);
+		return 0;
+	}
+
+	if(this->m_SpnCustomMessageInfo[index].Index != index)
+	{
+		wsprintf(this->m_DefaultMessage,"Could not find message %d!",index);
+		return 0;
+	}
+
+	return &this->m_SpnCustomMessageInfo[index];
 }

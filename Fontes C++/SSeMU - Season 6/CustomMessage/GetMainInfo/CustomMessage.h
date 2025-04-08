@@ -4,7 +4,7 @@
 
 #pragma once
 
-#define MAX_CUSTOM_MESSAGE 60
+#define MAX_CUSTOM_MESSAGE 150
 
 struct CUSTOM_MESSAGE_INFO
 {
@@ -22,7 +22,11 @@ public:
 	void SetInfoEng(CUSTOM_MESSAGE_INFO info);
 	void SetInfoPor(CUSTOM_MESSAGE_INFO info);
 	void SetInfoSpn(CUSTOM_MESSAGE_INFO info);
+	CUSTOM_MESSAGE_INFO* GetInfoEng(int index);
+	CUSTOM_MESSAGE_INFO* GetInfoPor(int index);
+	CUSTOM_MESSAGE_INFO* GetInfoSpn(int index);
 public:
+	char m_DefaultMessage[128];
 	CUSTOM_MESSAGE_INFO m_EngCustomMessageInfo[MAX_CUSTOM_MESSAGE];
 	CUSTOM_MESSAGE_INFO m_PorCustomMessageInfo[MAX_CUSTOM_MESSAGE];
 	CUSTOM_MESSAGE_INFO m_SpnCustomMessageInfo[MAX_CUSTOM_MESSAGE];
